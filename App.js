@@ -1,17 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, FlatList } from 'react-native';
-import CoinItem from './src/components/CoinItem';
-import cryptocurrencies from './assets/data/cryptocurrencies.json'
-import HomeScreen from './src/screens/HomeScreen';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import CoinDetailScreen from './src/screens/CoinDetailedScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import Navigation from './src/navigation';
+import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Inter_900Black,
+    DroidSans: require('./assets/fonts/DroidSans.ttf'),
+  });
+  if (!fontsLoaded) {
+    return <ActivityIndicator size={'large'} />;
+  }
+
   return (
-    <View style={styles.container}>
-      {/* <HomeScreen /> */}
-      <CoinDetailScreen />
-      <StatusBar style='light' />
-    </View>
+    <NavigationContainer
+      theme={{
+        colors: {
+          background: '#121212',
+        },
+      }}
+    >
+      <View style={styles.container}>
+        <Navigation />
+        {/* <CoinDetailScreen /> */}
+        <StatusBar style='light' />
+      </View>
+    </NavigationContainer>
   );
 }
 
@@ -21,5 +37,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     paddingTop: 50,
   },
- 
 });
