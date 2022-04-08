@@ -6,6 +6,7 @@ const FilterComponent = (props) => {
   const isFilterSelected = (filter) => filter === selectedRange;
 
   return (
+    // Switching between the filterArrays and filtering it if 24h is pressed show its data like that
     <Pressable
       style={{
         paddingHorizontal: 10,

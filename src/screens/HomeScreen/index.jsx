@@ -7,17 +7,19 @@ const HomeScreen = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchCoins = async (pageNumber) => {
+  const fetchCoins = async (pageNumber) => { 
+    // pagenumber is based on the number of coins per page a page only contains 50 coins after that it is second page etc. 
     if (loading) {
       return;
     }
     setLoading(true);
     const coinsData = await getMarketData(pageNumber);
-    setCoins((existingCoins) => [...existingCoins, ...coinsData]);
+    setCoins((existingCoins) => [...existingCoins, ...coinsData]); // to prevent overwriting the existing coins array i.e when we are moving to the second page we are not overwriting the first page coins
     setLoading(false);
   };
 
   const refetchCoins = async () => {
+    // refetch is used to fetch the first 50 when the user scrolls to the end of the list
     if (loading) {
       return;
     }
@@ -59,8 +61,9 @@ const HomeScreen = () => {
       </View>
       <FlatList
         data={coins}
-        renderItem={({ item }) => <CoinItem marketCoin={item} />}
-        onEndReached={() => fetchCoins(coins.length / 50 + 1)}
+        renderItem={({ item }) => <CoinItem marketCoin={item} />} // passig the coins to the coinItem
+        onEndReached={() => fetchCoins(coins.length / 50 + 1)} // just fetch the next 50 coins when the user scrolls to the end of the list || adding as pages like 1st page contain 50 coins, 2nd page contain next 50 coins and so on
+        // like if we have 50 coins 50/50 +1 =2 so we move to the second page and fetch the next 50 coins
         refreshControl={
           <RefreshControl
             refreshing={loading}

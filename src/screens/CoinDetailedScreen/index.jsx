@@ -18,6 +18,7 @@ import {
 import FilterComponent from './components/FilteredComponent';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 
+// used to switch between these timestamps
 const filterDaysArray = [
   { filterDay: '1', filterText: '24h' },
   { filterDay: '7', filterText: '7d' },
@@ -31,6 +32,8 @@ const CoinDetailedScreen = () => {
   const [coinMarketData, setCoinMarketData] = useState(null);
   const [coinCandleChartData, setCoinCandleChartData] = useState(null);
   const route = useRoute();
+  // as we have redirected to this route from CoinItem we have passed the coinId also
+  // so we destructured it and set it to coinId
   const {
     params: { coinId },
   } = route;
@@ -48,7 +51,7 @@ const CoinDetailedScreen = () => {
     setUsdValue(fetchedCoinData.market_data.current_price.usd.toString());
     setLoading(false);
   };
-
+  
   const fetchMarketCoinData = async (selectedRangeValue) => {
     const fetchedCoinMarketData = await getCoinMarketChart(
       coinId,
@@ -106,6 +109,8 @@ const CoinDetailedScreen = () => {
   const screenWidth = Dimensions.get('window').width;
 
   const formatCurrency = ({ value }) => {
+    // this is to format the currency to 2 decimal places and add the $ sign
+    // instead of displaying the whole numbers we are just formatting the value
     'worklet';
     if (value === '') {
       if (current_price.usd < 1) {
@@ -120,6 +125,7 @@ const CoinDetailedScreen = () => {
   };
 
   const changeCoinValue = (value) => {
+    // we are using this to update the coin value when the user changes it
     setCoinValue(value);
     const floatValue = parseFloat(value.replace(',', '.')) || 0;
     setUsdValue((floatValue * current_price.usd).toString());
@@ -133,6 +139,7 @@ const CoinDetailedScreen = () => {
 
   return (
     <View style={{ paddingHorizontal: 10 }}>
+      {/* Inorder to use the line chart we need to wrap the whole thing in a provider */}
       <LineChart.Provider
         data={prices.map(([timestamp, value]) => ({ timestamp, value }))}
       >
@@ -171,6 +178,7 @@ const CoinDetailedScreen = () => {
           </View>
         </View>
         <View style={styles.filtersContainer}>
+          {/* This is to swich between the 1h, 24h, 1w ... datas */}
           {filterDaysArray.map((day) => (
             <FilterComponent
               filterDay={day.filterDay}
@@ -180,6 +188,7 @@ const CoinDetailedScreen = () => {
               key={day.filterText}
             />
           ))}
+          {/* Switch between candle and line chart */}
           {isCandleChartVisible ? (
             <MaterialIcons
               name='show-chart'

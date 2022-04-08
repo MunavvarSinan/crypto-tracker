@@ -18,10 +18,12 @@ const CoinItem = ({ marketCoin }) => {
 
   const navigation = useNavigation();
 
+  // change the color according to the profilt and loss
   const percentageColor =
-    price_change_percentage_24h > 0 ? '#ea3943' : '#16c784' || 'white';
+    price_change_percentage_24h < 0 ? '#ea3943' : '#16c784' || 'white';
 
   const normalizeMarketCap = (marketCap) => {
+    // this is to change the values to trillion, billion, million and thousand instead of displaying the whole value which obviously clutter the app
     if (marketCap > 1e12) {
       return `${(marketCap / 1e12).toFixed(3)} T`;
     }
@@ -39,7 +41,8 @@ const CoinItem = ({ marketCoin }) => {
   return (
     <Pressable
       style={styles.coinContainer}
-      onPress={() => navigation.navigate('CoinDetailedScreen', { coinId: id })}
+      // we are getting the whole coin data from Home screen and we are getting the id of the coin we pressed and passing it
+      onPress={() => navigation.navigate('CoinDetailedScreen', { coinId: id })} 
     >
       <Image
         source={{ uri: image }}
