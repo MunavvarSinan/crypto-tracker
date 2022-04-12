@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Navigation from './src/navigation';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import WatchlistProvider from './src/context/WatchlistContext';
+import { RecoilRoot } from 'recoil';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -23,13 +24,15 @@ export default function App() {
         },
       }}
     >
-      {/* we are wrapping the whole app in the watchlist provider inorder to use those values everywhere */}
-      <WatchlistProvider>
-        <View style={styles.container}>
-          <Navigation />
-          <StatusBar style='light' />
-        </View>
-      </WatchlistProvider>
+      <RecoilRoot>
+        {/* we are wrapping the whole app in the watchlist provider inorder to use those values everywhere */}
+        <WatchlistProvider>
+          <View style={styles.container}>
+            <Navigation />
+            <StatusBar style='light' />
+          </View>
+        </WatchlistProvider>
+      </RecoilRoot>
     </NavigationContainer>
   );
 }

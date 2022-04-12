@@ -1,12 +1,15 @@
-import { View, Text, FlatList } from 'react-native';
-import React from 'react';
+import { View, Text } from 'react-native';
+import React, { Suspense } from 'react';
 import PortfoilioAssetsList from './components/PortfolioAssetList';
-
 
 const PortfolioScreen = () => {
   return (
     <View>
-      <PortfoilioAssetsList />
+      <Suspense
+        fallback={<Text style={{ color: 'white' }}>Loading please wait</Text>}
+      >
+        <PortfoilioAssetsList />
+      </Suspense>
     </View>
   );
 };
