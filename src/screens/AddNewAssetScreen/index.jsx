@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable,  KeyboardAvoidingView, Platform }  from 'react-native';
-import SearchableDropdown from 'react-native-searchable-dropdown';
-import styles from './styles';
-import { useRecoilState } from 'recoil';
-import { allPortfolioBoughAssetsInStorage } from '../../atoms/PortfolioAssets.js';
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, Pressable, KeyboardAvoidingView, Platform } from "react-native";
+import SearchableDropdown from "react-native-searchable-dropdown";
+import styles from "./styles";
+import { useRecoilState } from "recoil";
+import { allPortfolioBoughtAssetsInStorage } from "../../atoms/PortfolioAssets";
 import { getAllCoins, getDetailedCoinData } from "../../services/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -11,15 +11,18 @@ import uuid from 'react-native-uuid';
 
 const AddNewAssetScreen = () => {
   const [allCoins, setAllCoins] = useState([]);
-  const [boughtAssetQuantity, setBoughtAssetQuantity] = useState('');
+  const [boughtAssetQuantity, setBoughtAssetQuantity] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedCoinId, setSelectedCoinId] = useState(null);
   const [selectedCoin, setSelectedCoin] = useState(null);
+
   const [assetsInStorage, setAssetsInStorage] = useRecoilState(
-    allPortfolioBoughAssetsInStorage
+    allPortfolioBoughtAssetsInStorage
   );
 
-  const isQuantityEntered = () => boughtAssetQuantity === '';
+  const navigation = useNavigation();
+
+  const isQuantityEntered = () => boughtAssetQuantity === "";
 
   const fetchAllCoins = async () => {
     if (loading) {
@@ -41,7 +44,6 @@ const AddNewAssetScreen = () => {
     setLoading(false);
   };
 
-  const navigation = useNavigation();
   useEffect(() => {
     fetchAllCoins();
   }, []);
@@ -64,52 +66,46 @@ const AddNewAssetScreen = () => {
     };
     const newAssets = [...assetsInStorage, newAsset];
     const jsonValue = JSON.stringify(newAssets);
-    await AsyncStorage.setItem('@portfolio_coins', jsonValue);
+    await AsyncStorage.setItem("@portfolio_coins", jsonValue);
     setAssetsInStorage(newAssets);
     navigation.goBack();
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      keyboardVerticalOffset={80}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <KeyboardAvoidingView style={{ flex: 1 }} keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <SearchableDropdown
         items={allCoins}
         onItemSelect={(item) => setSelectedCoinId(item.id)}
         containerStyle={styles.dropdownContainer}
         itemStyle={styles.item}
-        itemTextStyle={{ color: 'white' }}
+        itemTextStyle={{ color: "white" }}
         resetValue={false}
-        placeholder={selectedCoinId || 'Select a coin...'}
-        placeholderTextColor='white'
+        placeholder={selectedCoinId || "Select a coin..."}
+        placeholderTextColor="white"
         textInputProps={{
-          underlineColorAndroid: 'transparent',
+          underlineColorAndroid: "transparent",
           style: {
             padding: 12,
             borderWidth: 1.5,
-            borderColor: '#444444',
+            borderColor: "#444444",
             borderRadius: 5,
-            backgroundColor: '#1e1e1e',
-            color: 'white',
+            backgroundColor: "#1e1e1e",
+            color: "white",
           },
         }}
       />
       {selectedCoin && (
         <>
           <View style={styles.boughtQuantityContainer}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <TextInput
-                style={{ color: 'white', fontSize: 90 }}
+                style={{ color: "white", fontSize: 90 }}
                 value={boughtAssetQuantity}
-                placeholder='0'
-                keyboardType='numeric'
+                placeholder="0"
+                keyboardType="numeric"
                 onChangeText={setBoughtAssetQuantity}
               />
-              <Text style={styles.ticker}>
-                {selectedCoin.symbol.toUpperCase()}
-              </Text>
+              <Text style={styles.ticker}>{selectedCoin.symbol.toUpperCase()}</Text>
             </View>
             <Text style={styles.pricePerCoin}>
               ${selectedCoin.market_data.current_price.usd} per coin
@@ -118,7 +114,7 @@ const AddNewAssetScreen = () => {
           <Pressable
             style={{
               ...styles.buttonContainer,
-              backgroundColor: isQuantityEntered() ? '#303030' : '#4169E1',
+              backgroundColor: isQuantityEntered() ? "#303030" : "#4169E1",
             }}
             onPress={onAddNewAsset}
             disabled={isQuantityEntered()}
@@ -126,7 +122,7 @@ const AddNewAssetScreen = () => {
             <Text
               style={{
                 ...styles.buttonText,
-                color: isQuantityEntered() ? 'grey' : 'white',
+                color: isQuantityEntered() ? "grey" : "white",
               }}
             >
               Add New Asset

@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import styles from './styles';
 import PortfolioAssetItem from '../PortfolioAssetItem';
 import { useNavigation } from '@react-navigation/native';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { allPortfolioAssets } from '../../../../atoms/PortfolioAssets';
 
 const PortfoilioAssetsList = () => {
@@ -13,7 +13,7 @@ const PortfoilioAssetsList = () => {
   return (
     <View>
       <FlatList
-        data={[{ id: 'bitcoin' }]}
+        data={assets}
         renderItem={({ item }) => <PortfolioAssetItem assetItem={item} />}
         ListHeaderComponent={
           // List header components is used because we need to display th flat list below the amout and some detail
