@@ -57,7 +57,7 @@ const AddNewAssetScreen = () => {
   const onAddNewAsset = async () => {
     const newAsset = {
       id: selectedCoin.id,
-      unique_id: selectedCoin.id + uuid.v4(),
+      unique_id: selectedCoin.id + uuid.v4(), // we are using a unique id to identify each coin in the storage even though the coin id is the same
       name: selectedCoin.name,
       image: selectedCoin.image.small,
       ticker: selectedCoin.symbol.toUpperCase(),
